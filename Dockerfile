@@ -25,7 +25,7 @@ RUN apt-get update \
     && apt-get clean \
     && apt-get autoremove
 # Composer
-RUN wget https://mirrors.aliyun.com/composer/composer.phar \
+RUN curl -sS https://getcomposer.org/installer | php \
     && mv composer.phar /usr/local/bin/composer \
     && composer self-update --clean-backups \
     && composer config -g repo.packagist composer https://mirrors.aliyun.com/composer/
