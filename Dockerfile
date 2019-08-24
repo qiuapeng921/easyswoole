@@ -1,16 +1,11 @@
-ARG PHP_VERSION
-FROM php:${PHP_VERSION}-fpm
+FROM php:7.2.13-fpm
 
-ARG PHP_XDEBUG
-ARG PHP_SWOOLE
-ARG PHP_REDIS
-ARG HIREDIS_VERSION
-ARG REPLACE_SOURCE_LIST
+ENV PHP_SWOOLE=4.4.4
+ENV PHP_REDIS=5.0.2
+ENV HIREDIS_VERSION=0.14.0
 
-COPY ./sources.list /etc/apt/sources.list.tmp
-RUN if [ "${REPLACE_SOURCE_LIST}" = "true" ]; then \
-    mv /etc/apt/sources.list.tmp /etc/apt/sources.list; else \
-    rm -rf /etc/apt/sources.list.tmp; fi
+RUN mv /etc/apt/sources.list /etc/apt/sources.list.bak
+COPY ./sources.list /etc/apt/sources.list
 
 # Libs
 RUN apt-get update \
@@ -24,10 +19,13 @@ RUN apt-get update \
     libssl-dev \
     libnghttp2-dev \
     libpcre3-dev \
+    libmcrypt-dev \
+    libbz2-dev \
+    libicu-dev \
     && apt-get clean \
     && apt-get autoremove
 # Composer
-RUN curl -sS https://getcomposer.org/installer | php \
+RUN wget https://mirrors.aliyun.com/composer/composer.phar \
     && mv composer.phar /usr/local/bin/composer \
     && composer self-update --clean-backups \
     && composer config -g repo.packagist composer https://mirrors.aliyun.com/composer/
@@ -40,6 +38,10 @@ RUN wget http://pecl.php.net/get/redis-${PHP_REDIS}.tgz -O /tmp/redis.tar.tgz \
     && pecl install /tmp/redis.tar.tgz \
     && rm -rf /tmp/redis.tar.tgz \
     && docker-php-ext-enable redis
+
+# MongoDB extension
+RUN pecl install mongodb \
+    && docker-php-ext-enable mongodb
 
 # Hiredis
 RUN wget https://github.com/redis/hiredis/archive/v${HIREDIS_VERSION}.tar.gz -O hiredis.tar.gz \
@@ -73,11 +75,8 @@ RUN wget https://github.com/swoole/swoole-src/archive/v${PHP_SWOOLE}.tar.gz -O s
 RUN apt install -y libfreetype6-dev libjpeg62-turbo-dev libpng-dev \
     && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
     && docker-php-ext-install gd \
-    && apt install -y libicu-dev \
     && docker-php-ext-install intl \
-    && apt install -y libbz2-dev \
     && docker-php-ext-install bz2 \
-    && apt install -y libmcrypt-dev \
     && docker-php-ext-install pcntl \
     && docker-php-ext-install pdo_mysql \
     && docker-php-ext-install opcache \
