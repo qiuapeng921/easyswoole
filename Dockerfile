@@ -1,6 +1,6 @@
-FROM php:7.2.13-fpm
+FROM php:7.3.8-fpm
 
-ENV PHP_SWOOLE=4.4.4
+ENV PHP_SWOOLE=4.4.7
 ENV PHP_REDIS=5.0.2
 ENV HIREDIS_VERSION=0.14.0
 
@@ -8,20 +8,18 @@ RUN mv /etc/apt/sources.list /etc/apt/sources.list.bak
 COPY ./sources.list /etc/apt/sources.list
 
 # Libs
+
+RUN apt-get update && apt-get install libssl-dev build-essential zlibc libidn11-dev libidn11 -y
+
 RUN apt-get update \
     && apt-get install -y \
     curl \
     wget \
     git \
     zip \
-    vim \
-    libz-dev \
-    libssl-dev \
-    libnghttp2-dev \
-    libpcre3-dev \
-    libmcrypt-dev \
-    libbz2-dev \
-    libicu-dev \
+    iputils-ping \
+    net-tools \
+    lsof \
     && apt-get clean \
     && apt-get autoremove
 # Composer
@@ -42,6 +40,9 @@ RUN wget http://pecl.php.net/get/redis-${PHP_REDIS}.tgz -O /tmp/redis.tar.tgz \
 # MongoDB extension
 RUN pecl install mongodb \
     && docker-php-ext-enable mongodb
+
+RUN pecl install inotify \
+    && docker-php-ext-enable inotify
 
 # Hiredis
 RUN wget https://github.com/redis/hiredis/archive/v${HIREDIS_VERSION}.tar.gz -O hiredis.tar.gz \
@@ -70,6 +71,8 @@ RUN wget https://github.com/swoole/swoole-src/archive/v${PHP_SWOOLE}.tar.gz -O s
     ) \
     && rm -r swoole \
     && docker-php-ext-enable swoole
+
+RUN echo alias ll='ls -la' >> ~/.bashrc
 
 # More extensions
 RUN apt install -y libfreetype6-dev libjpeg62-turbo-dev libpng-dev \
