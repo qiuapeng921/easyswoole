@@ -1,4 +1,4 @@
-FROM php:7.3.9
+FROM php:7.2
 
 ENV SWOOLE_VERSION=4.4.7
 ENV PHP_REDIS=5.0.2
@@ -13,7 +13,7 @@ RUN apt-get update \
         libjpeg-dev \
         libpng-dev \
         libfreetype6-dev \
-        && pecl install mongodb
+        && pecl install mongodb \
         && pecl install inotify
 
 RUN echo "alias ll='ls -la'" >> ~/.bashrc && source ~/.bashrc
