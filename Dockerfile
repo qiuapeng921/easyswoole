@@ -12,12 +12,14 @@ RUN apt-get update \
         libpcre3-dev \
         libjpeg-dev \
         libpng-dev \
-        libfreetype6-dev
+        libfreetype6-dev \
+        && pecl install mongodb
+        && pecl install inotify
 
 RUN echo "alias ll='ls -la'" >> ~/.bashrc && source ~/.bashrc
 
 RUN docker-php-ext-install \
-    gd intl bz2 pcntl pdo_mysql opcache mysqli mbstring exif bcmath sockets zip sysvmsg sysvsem sysvshm mongodb inotify
+    gd intl bz2 pcntl pdo_mysql opcache mysqli mbstring exif bcmath sockets zip sysvmsg sysvsem sysvshm
 
 RUN curl -sS https://getcomposer.org/installer | php \
     && mv composer.phar /usr/local/bin/composer \
