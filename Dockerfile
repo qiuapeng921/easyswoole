@@ -16,7 +16,7 @@ RUN apt-get update \
         && pecl install mongodb \
         && pecl install inotify
 
-RUN echo "alias ll='ls -la'" >> ~/.bashrc && source ~/.bashrc
+#RUN echo "alias ll='ls -la'" >> ~/.bashrc && source ~/.bashrc
 
 RUN docker-php-ext-install \
     gd intl bz2 pcntl pdo_mysql opcache mysqli mbstring exif bcmath sockets zip sysvmsg sysvsem sysvshm
