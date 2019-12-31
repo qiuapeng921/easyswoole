@@ -36,7 +36,7 @@ RUN curl -sS https://getcomposer.org/installer | php \
     && composer config -g repo.packagist composer https://mirrors.aliyun.com/composer/
 
 # PDO extension
-RUN docker-php-ext-install bcmath gd pdo_mysql mbstring sockets zip sysvmsg sysvsem sysvshm
+RUN docker-php-ext-install bcmath gd pdo_mysql mbstring sockets zip sysvmsg sysvsem sysvshm mysqli
 
 # Redis extension
 RUN wget http://pecl.php.net/get/redis-${PHP_REDIS}.tgz -O /tmp/redis.tar.tgz \
