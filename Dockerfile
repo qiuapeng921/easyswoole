@@ -47,6 +47,9 @@ RUN wget http://pecl.php.net/get/redis-${PHP_REDIS}.tgz -O /tmp/redis.tar.tgz \
 # MongoDb extension
 RUN pecl install mongodb && docker-php-ext-enable mongodb
 
+# MsgPack extension
+RUN pecl install msgpack && docker-php-ext-enable msgpack
+
 # Swoole extension
 RUN wget https://github.com/swoole/swoole-src/archive/v${SWOOLE_VERSION}.tar.gz -O swoole.tar.gz \
     && mkdir -p swoole \
