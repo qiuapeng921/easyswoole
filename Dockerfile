@@ -67,4 +67,4 @@ RUN wget https://github.com/swoole/swoole-src/archive/v${SWOOLE_VERSION}.tar.gz 
 
 WORKDIR /var/www/html
 
-EXPOSE 9501
+EXPOSE 9500 9501 9502 9504 9505
