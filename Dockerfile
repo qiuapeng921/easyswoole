@@ -29,8 +29,9 @@ RUN apt-get update \
     libpng-dev \
     libfreetype6-dev \
     && apt-get clean \
-    && apt-get autoremove
-    && npm install npm@latest -g && npm install -g pm2
+    && apt-get autoremove \
+    && npm install npm@latest -g \
+    && npm install -g pm2
 
 # Composer
 RUN curl -sS https://getcomposer.org/installer | php \
