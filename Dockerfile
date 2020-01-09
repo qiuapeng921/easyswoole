@@ -18,6 +18,8 @@ RUN apt-get update \
     htop \
     openssl \
     vim \
+    nodejs \
+    npm \
     libz-dev \
     libzip-dev\
     libssl-dev \
@@ -28,6 +30,7 @@ RUN apt-get update \
     libfreetype6-dev \
     && apt-get clean \
     && apt-get autoremove
+    && npm install npm@latest -g && npm install -g pm2
 
 # Composer
 RUN curl -sS https://getcomposer.org/installer | php \
