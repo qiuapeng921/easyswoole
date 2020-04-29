@@ -1,4 +1,4 @@
-FROM php:7.3-fpm
+FROM php:7.4-fpm
 
 ENV SWOOLE_VERSION=4.5.0
 ENV PHP_REDIS=5.0.2
